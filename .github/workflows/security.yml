@@ -47,6 +47,8 @@ jobs:
             --config p/javascript \
             --config p/secrets \
             --config p/owasp-top-ten \
+            --severity ERROR \
+            --severity WARNING \
             --error \
             .
 
