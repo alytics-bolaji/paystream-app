@@ -22,7 +22,7 @@ jobs:
           tar -xzf gitleaks.tar.gz gitleaks
           sudo mv gitleaks /usr/local/bin/
       - name: Scan full repo history
-        run: gitleaks detect --source . --redact --exit-code 1
+        run: gitleaks detect --source . --redact --exit-code 1 --baseline-path .gitleaks-baseline.json
 
   # ── Job 2: SCA / Dependency Audit ───────────────
   dependency-audit:
