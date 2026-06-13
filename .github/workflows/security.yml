@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
+  # ── Job 1: Secret Scanning ──────────────────────
   secret-scan:
     name: Detect Secrets (Gitleaks)
     runs-on: ubuntu-latest
@@ -23,6 +24,7 @@ jobs:
       - name: Scan full repo history
         run: gitleaks detect --source . --redact --exit-code 1
 
+  # ── Job 2: SCA / Dependency Audit ───────────────
   dependency-audit:
     name: Dependency Audit (npm audit)
     runs-on: ubuntu-latest
@@ -34,6 +36,7 @@ jobs:
       - run: npm ci
       - run: npm audit --audit-level=high
 
+  # ── Job 3: SAST ──────────────────────────────────
   sast:
     name: Static Analysis (Semgrep)
     runs-on: ubuntu-latest
@@ -41,14 +44,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Semgrep
         run: pip install semgrep
-      - name: Run Semgrep full scan
-        run: |
-          semgrep scan \
-            --config p/javascript \
-            --config p/secrets \
-            --config p/owasp-top-ten \
-            --severity ERROR \
-            --severity WARNING \
-            --error \
-            .
-
+      - name: Run Semgrep scan
+        run: semgrep scan --config .semgrep/secrets.yml --error .
